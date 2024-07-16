@@ -1,0 +1,46 @@
+﻿@model SummaryViewModel
+@{
+    string jsLabels = "";
+    string dataValues = "";
+    string groupType = Model.SaleSummaries?.First().Type;
+
+    if (Model.SaleSummaries != null)
+    {
+        foreach (var group in Model.SaleSummaries)
+        {
+            jsLabels += $"'{group.Label}',";
+            dataValues += $"{group.TotalUnits}, ";
+        }
+    }
+}
+
+<div>
+    <h1>Unit Sales by @groupType</h1>
+    <canvas id="myChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const ctx = document.getElementById('myChart');
+
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: [@Html.Raw(jsLabels)],
+        datasets: [{
+          label: '# of Unit Sales',
+          data: [@dataValues],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+</script>
+

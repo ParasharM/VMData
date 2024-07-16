@@ -1,0 +1,61 @@
+﻿@model VirginMediaData.Models.SalesViewModel
+@{
+    bool hasPrevPage = Model.Page != 1 && Model.Page <= Model.TotalPages;
+    bool hasNextPage = Model.Page < Model.TotalPages;
+
+    int nextPage = hasNextPage ? Model.Page + 1 : Model.Page;
+    int prevPage = hasPrevPage ? Model.Page - 1 : Model.Page;
+}
+
+<h1>All Sales</h1>
+<div>
+    <p>Below is a list of all sales (20 per page). Click the page navigation to navigate to next / previous pages</p>
+</div>
+
+@if (!Model.Sales.Any()){
+    <p>No sales data is available.</p>
+}else{
+    <div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Segment</th>
+                <th>Country</th>
+                <th>Product</th>
+                <th>Discount Band</th>
+                <th>Units Sold</th>
+                <th>Mfg Price</th>
+                <th>Sale Price</th>
+                <th>Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach(var saleItem in Model.Sales){
+                <tr>
+                    <td>@saleItem.Segment</td>
+                    <td>@saleItem.Country</td>
+                    <td>@saleItem.Product</td>
+                    <td>@saleItem.Discount</td>
+                    <td>@saleItem.UnitsSold</td>
+                    <td>@saleItem.ManufacturingPrice</td>
+                    <td>@saleItem.SalePrice</td>
+                    <td>@saleItem.Date.ToString("dd/MM/yyyy")</td>
+                </tr>
+            }
+            </tbody>
+
+        </table>
+    </div>
+
+}
+@if (hasPrevPage)
+{
+    @Html.ActionLink("<<", "Index", new { page = prevPage })
+}
+
+Showing Page @Model.Page of @Model.TotalPages of total @Model.TotalRecords
+
+@if (hasNextPage)
+{
+    @Html.ActionLink(">>", "Index", new { page = nextPage })
+}

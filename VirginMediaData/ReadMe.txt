@@ -1,0 +1,1 @@
+﻿Hello, before running this app, please ensure that you have set CSVPath in appsettings.json to the absolute path of the CSV file.
