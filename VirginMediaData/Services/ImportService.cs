@@ -6,6 +6,7 @@ namespace VirginMediaData.Services
     public class ImportService : IImportService
 	{
 		private const string DELIMITER = ",";
+		private const int MIN_COLUMNS = 8;
 		public IEnumerable<SalesInfo> ImportCSVData(string filePath)
 		{
 			ArgumentNullException.ThrowIfNullOrEmpty(filePath, nameof(filePath));
@@ -23,9 +24,9 @@ namespace VirginMediaData.Services
 		{
 			var columns = row.Split(DELIMITER);
 
-			if (columns.Length < 8)
+			if (columns.Length < MIN_COLUMNS)
 			{
-				throw new Exception("Parsing error. Column length not expected");
+				throw new Exception($"Parsing error. Column length should be {MIN_COLUMNS} at minimum. Data may be missing or corrupt.");
 			}
 
 
