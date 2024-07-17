@@ -1,4 +1,5 @@
-﻿using VirginMediaData.Domain;
+﻿using System.Security.Policy;
+using VirginMediaData.Domain;
 
 namespace VirginMediaData.Services
 {
@@ -23,37 +24,35 @@ namespace VirginMediaData.Services
 			return _salesInfos.AsQueryable();
 		}
 
-		public IEnumerable<SaleSummary> UnitSalesByCountry()
+		public IEnumerable<SaleSummary> UnitSalesByMetric(string metric)
 		{
-            return _salesInfos.GroupBy(s => s.Country)
-                    .Select(g => new SaleSummary
-					{
-						Label = g.Key,
-						TotalUnits = g.Sum(u => u.UnitsSold),
-						TotalSales = g.Sum(s => s.SalePrice),
-						Type = "Country"
-					});
-		}
+			var query = _salesInfos.AsQueryable();
+			IQueryable<IGrouping<string, SalesInfo>> groupedQuery;
 
-		public IEnumerable<SaleSummary> UnitSalesByProduct()
-		{
-			return _salesInfos.GroupBy(s => s.Product)
-					.Select(g => new SaleSummary { 
-						Type = "Product", 
-						Label = g.Key, 
-						TotalSales = g.Sum(s => s.SalePrice), 
-						TotalUnits = g.Sum(s => s.UnitsSold)
-					});
-		}
+			switch(metric)
+			{
+				case Constants.Country:
+					groupedQuery = query.GroupBy(s => s.Country);
+					break;
+				case Constants.Product:
+                    groupedQuery = query.GroupBy(s => s.Product);
+					break;
+				case Constants.Segment:
+					groupedQuery = query.GroupBy(s => s.Segment);
+					break;
+				default:
+					metric = Constants.Country;
+					groupedQuery = query.GroupBy(s => s.Country);
+					break;
+			}
 
-		public IEnumerable<SaleSummary> UnitSalesBySegment()
-		{
-			return _salesInfos.GroupBy(s => s.Segment)
-					.Select(g => new SaleSummary { Type = "Segment",
-						Label = g.Key,
-						TotalSales = g.Sum(s => s.SalePrice),
-						TotalUnits = g.Sum(s => s.UnitsSold)
-					});
-		}
+			return groupedQuery.Select(g => new SaleSummary
+            {
+                Label = g.Key,
+                TotalUnits = g.Sum(u => u.UnitsSold),
+                TotalSales = g.Sum(s => s.SalePrice),
+                Type = metric
+            }).ToList();
+        }
 	}
 }

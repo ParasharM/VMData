@@ -35,24 +35,24 @@ namespace VirginMediaData.Controllers
 		}
 
 		//TODO: refactor into one method with params and logic
-	    public ActionResult UnitSales(string group = "country")
+	    public ActionResult UnitSales(string group = Constants.Country)
         {
 
 			IEnumerable<SaleSummary> chartData = Enumerable.Empty<SaleSummary>();
 
 			switch (group.ToLower())
 			{
-				case "country":
-					chartData = _dataService.UnitSalesByCountry();
+				case Constants.Country:
+					chartData = _dataService.UnitSalesByMetric(group);
 					break;
-				case "product":
-					chartData = _dataService.UnitSalesByProduct();
+				case Constants.Product:
+					chartData = _dataService.UnitSalesByMetric(group);
 					break;
-                case "segment":
-                    chartData = _dataService.UnitSalesBySegment();
+                case Constants.Segment:
+                    chartData = _dataService.UnitSalesByMetric(group);
                     break;
 				default:
-                    chartData = _dataService.UnitSalesByCountry();
+                    chartData = _dataService.UnitSalesByMetric(Constants.Country);
 					break;
             }
 

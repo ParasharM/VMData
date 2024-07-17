@@ -1,11 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using VirginMediaData.Controllers;
+using VirginMediaData;
 using VirginMediaData.Domain;
 using VirginMediaData.Services;
 
@@ -94,7 +89,7 @@ namespace Virgin.Tests
         }
 
         [Test]
-        public void UnitSalesByCountry_Returns_Data_Grouped_By_Country()
+        public void UnitSalesByMetric_Returns_Data_Grouped_By_Country()
         {
             //arrange
             _configurationMock.SetupGet(x => x[It.Is<string>(s => s == "CSVPath")]).Returns("c:\\temp\\data.csv");
@@ -103,14 +98,14 @@ namespace Virgin.Tests
             var sut = new DataRepository(_importServiceMock.Object, _configurationMock.Object);
 
             //act
-            var groupedByCountry = sut.UnitSalesByCountry();
+            var groupedByCountry = sut.UnitSalesByMetric(Constants.Country);
 
             //assert
             Assert.True(groupedByCountry.Count() == 3);
         }
 
         [Test]
-        public void UnitSalesByProduct_Returns_Data_Grouped_By_Product()
+        public void UnitSalesByMetric_Returns_Data_Grouped_By_Product()
         {
             //arrange
             _configurationMock.SetupGet(x => x[It.Is<string>(s => s == "CSVPath")]).Returns("c:\\temp\\data.csv");
@@ -119,14 +114,14 @@ namespace Virgin.Tests
             var sut = new DataRepository(_importServiceMock.Object, _configurationMock.Object);
 
             //act
-            var groupedByProduct = sut.UnitSalesByProduct();
+            var groupedByProduct = sut.UnitSalesByMetric(Constants.Product);
 
             //assert
             Assert.True(groupedByProduct.Count() == 2);
         }
 
         [Test]
-        public void UnitSalesBySegment_Returns_Data_Grouped_By_Segment()
+        public void UnitSalesByMetric_Returns_Data_Grouped_By_Segment()
         {
             //arrange
             _configurationMock.SetupGet(x => x[It.Is<string>(s => s == "CSVPath")]).Returns("c:\\temp\\data.csv");
@@ -135,10 +130,10 @@ namespace Virgin.Tests
             var sut = new DataRepository(_importServiceMock.Object, _configurationMock.Object);
 
             //act
-            var groupedByProduct = sut.UnitSalesBySegment();
+            var groupedBySegment = sut.UnitSalesByMetric(Constants.Segment);
 
             //assert
-            Assert.True(groupedByProduct.Count() == 4);
+            Assert.True(groupedBySegment.Count() == 4);
         }
 
         private IEnumerable<SalesInfo> GetMockSalesData()
