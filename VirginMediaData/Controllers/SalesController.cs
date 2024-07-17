@@ -34,7 +34,6 @@ namespace VirginMediaData.Controllers
 			return View(model);
 		}
 
-		//TODO: refactor into one method with params and logic
 	    public ActionResult UnitSales(string group = Constants.Country)
         {
 
