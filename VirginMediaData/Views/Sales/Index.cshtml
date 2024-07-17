@@ -50,12 +50,12 @@
 }
 @if (hasPrevPage)
 {
-    @Html.ActionLink("<<", "Index", new { page = prevPage })
+    <a class="nav-link text-dark" asp-area="" asp-controller="Sales" asp-action="Index" asp-route-page="@prevPage" style="display:inline;">&lt;&lt;</a>
 }
 
 Showing Page @Model.Page of @Model.TotalPages of total @Model.TotalRecords
 
 @if (hasNextPage)
 {
-    @Html.ActionLink(">>", "Index", new { page = nextPage })
+    <a class="nav-link text-dark" asp-area="" asp-controller="Sales" asp-action="Index" asp-route-page="@nextPage" style="display:inline;">&gt;&gt;</a>
 }
