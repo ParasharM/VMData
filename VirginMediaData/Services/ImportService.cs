@@ -12,7 +12,7 @@ namespace VirginMediaData.Services
 			ArgumentNullException.ThrowIfNullOrEmpty(filePath, nameof(filePath));
 
 			if (!File.Exists(filePath)) {
-				throw new FileNotFoundException($"Error: {filePath} not found");
+				throw new FileNotFoundException($"Error: {filePath} not found. Please ensure CSVPath is set correctly in appsettings.json");
 			}
 
 			var lines = File.ReadAllLines(filePath, System.Text.Encoding.ASCII);
